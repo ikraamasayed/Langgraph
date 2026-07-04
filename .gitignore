@@ -1,0 +1,9 @@
+.env
+__pycache__
+temp
+.venv
+Search_Agent
+logging.txt
+uv.lock
+AI_Search_Agent/
+
