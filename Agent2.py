@@ -1,8 +1,12 @@
+# CONTEXT MEMORY AGENT 
+
 from typing import TypedDict , List ,Union
 from langgraph.graph import StateGraph , START, END
 from langchain_core.messages import HumanMessage,AIMessage
 from langchain_ollama import ChatOllama
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -12,7 +16,11 @@ class AgentState(TypedDict):
     messages:List[Union[HumanMessage,AIMessage]]
 
 
-llm = ChatOllama(model='gemma3:4b')
+model=os.getenv("model")
+base_url=os.getenv("base_url")
+api_key=os.getenv("api_key")
+# llm = ChatOllama(model='gemma3:4b')
+llm = ChatNVIDIA(model=model,base_url=base_url,api_key=api_key)
 
 
 def process(state:AgentState)->AgentState:
@@ -39,7 +47,7 @@ while user_input!= "exit":
     user_input = input(f'Enter: ')
     
 
-with open("logging.txt","w") as file :
+with open("logging.txt","w",encoding="utf-8",errors="ignore") as file :
     file.write("Your Conversation LOG: \n")
 
     for message in conversation_history:
