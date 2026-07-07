@@ -19,7 +19,8 @@ class AgentState(TypedDict):
 
 # llm = ChatOllama(model='ornith:9b')
 llm = ChatNVIDIA(model=model, api_key=api_key,base_url=base_url,timeout= 120)
-# llm = ChatOpenAI (model=model , api_key=api_key,base_url=base_url,timeout=120)
+# #Does not work's with NIM api 
+# llm = ChatOpenAI (model=model , api_key=api_key,base_url=base_url,timeout=120) 
 
 
 def process(state:AgentState)->AgentState:
