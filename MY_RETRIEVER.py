@@ -15,19 +15,26 @@ from langchain_chroma import Chroma
 
 
 load_dotenv()
-model=os.getenv("tool_model")
-api= os.getenv("tool_model_api_key")
-base_url=os.getenv("tool_model_base_url")
+model=os.getenv("fast_model")
+api= os.getenv("open_router")
+base_url=os.getenv("open_router_base_url")
 
-embed_model=os.getenv("embed_model")
+embed_model=os.getenv("code_embed_model")
 embed_api_key=os.getenv("embed_api_key")
 
-llm = ChatNVIDIA(
+llm = ChatOpenAI(
     model=model,
-    temperature=0,
     api_key=api,
-    timeout=180)
-embeddings= NVIDIAEmbeddings(model=embed_model,api_key=embed_api_key)
+    base_url=base_url,
+    temperature=0,
+    timeout=200
+)
+
+embeddings = NVIDIAEmbeddings(
+    model=embed_model,
+    api_key=embed_api_key,
+    base_url=os.getenv("base_url")
+)
 print(os.getenv("tool_model"))
 
 pdf_path = "Stock_Market_Performance_2024.pdf"
@@ -104,9 +111,9 @@ def retriever_tool(query: str) -> str:
 
 
 tools = [retriever_tool]
-print(f"{llm.bind_tools} ") 
+print(f"{llm.bind_tools} ")     
 print(type(llm))
-llm = llm.bind_tools(tool=tools)
+llm = llm.bind_tools(tools)
 
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
